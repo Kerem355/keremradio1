@@ -1,0 +1,3661 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEREM Radyo Pro - Türkiye'nin En İyi Online Radyo Deneyimi</title>
+    <meta name="description" content="Türkiye'nin en popüler radyo istasyonlarını ücretsiz dinleyin. Pop, rock, jazz ve daha fazlası tek tıkla parmaklarınızın ucunda.">
+    <meta name="keywords" content="radyo, online radyo, türk radyoları, pop radyo, rock radyo, jazz radyo, ücretsiz radyo dinle">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keremradyo.com/">
+    <meta property="og:title" content="KEREM Radyo Pro - Türkiye'nin En İyi Online Radyo Deneyimi">
+    <meta property="og:description" content="Türkiye'nin en popüler radyo istasyonlarını ücretsiz dinleyin.">
+    <meta property="og:image" content="https://keremradyo.com/images/social-share.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://keremradyo.com/">
+    <meta property="twitter:title" content="KEREM Radyo Pro - Türkiye'nin En İyi Online Radyo Deneyimi">
+    <meta property="twitter:description" content="Türkiye'nin en popüler radyo istasyonlarını ücretsiz dinleyin.">
+    <meta property="twitter:image" content="https://keremradyo.com/images/social-share.jpg">
+
+    <!-- PWA Metadata -->
+    <meta name="theme-color" content="#8A2BE2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KEREM Radyo">
+    <meta name="application-name" content="KEREM Radyo">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#8A2BE2">
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+
+    <!-- Favicons -->
+    <link rel="canonical" href="https://keremradyo.com/">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --primary-light: #9d4dff;
+            --primary-dark: #6a1bb5;
+            --secondary: #121026;
+            --dark: #0D0B16;
+            --light: rgba(255, 255, 255, 0.85);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --error: #ff4d4d;
+            --success: #4dff4d;
+            --warning: #ffcc00;
+            --info: #4285f4;
+            --volume-level: 80%;
+            --section-border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Light theme variables */
+        .light-theme {
+            --secondary: #f0f0f0;
+            --dark: #ffffff;
+            --text: #333333;
+            --text-secondary: rgba(0, 0, 0, 0.7);
+            --glass: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.3);
+            --section-border: 2px solid rgba(0, 0, 0, 0.5);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--secondary), var(--dark));
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "auth player"
+                "list list"
+                "detail detail"
+                "flags flags";
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Glassmorphism effect */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--section-border);
+            box-shadow: 0 8px 32px 0 rgba(233, 229, 229, 0.845);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        header, .auth-section, .player-section, .radio-list, 
+        .detail-container, .flags-container, .profile-container {
+            composes: glass-card;
+        }
+        
+        /* Header styles */
+        header {
+            grid-area: header;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            border: var(--section-border);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .app-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .app-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+        
+        .app-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+        }
+        
+        /* Auth section */
+        .auth-section {
+            grid-area: auth;
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: var(--section-border);
+        }
+        
+        .player-section {
+            grid-area: player;
+            padding: 20px;
+            border: var(--section-border);
+        }
+
+        .radio-list {
+            grid-area: list;
+            padding: 20px;
+            border: var(--section-border);
+        }
+
+        .detail-container {
+            grid-area: detail;
+            padding: 20px;
+            display: none;
+            border: var(--section-border);
+        }
+
+        .flags-container {
+            grid-area: flags;
+            padding: 20px;
+            border: var(--section-border);
+        }
+
+        /* Profile section */
+        .profile-container {
+            display: none;
+            padding: 20px;
+            margin-top: 20px;
+            border: var(--section-border);
+        }
+
+        .turkey-flag {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .turkey-flag img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h2 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+
+        .profile-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .profile-content {
+            display: none;
+        }
+
+        .profile-content.active {
+            display: block;
+        }
+
+        .history-item, .favorite-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .history-item:hover, .favorite-item:hover {
+            background: rgba(138, 43, 226, 0.1);
+            transform: translateX(5px);
+        }
+
+        .history-item img, .favorite-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: none;
+        }
+
+        .history-info, .favorite-info {
+            flex: 1;
+        }
+
+        .history-info h4, .favorite-info h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-info p, .favorite-info p {
+            margin: 3px 0 0;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-time {
+            font-size: 0.7rem;
+            color: var(--primary);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        /* Flags section */
+        .flags-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .flags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+
+        .flag-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .flag-item:hover {
+            transform: scale(1.1);
+        }
+
+        .flag-img {
+            width: 60px;
+            height: 40px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .flag-name {
+            margin-top: 5px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: var(--text);
+        }
+
+        /* Detail section */
+        .detail-content {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-info-container, .contact-container {
+            composes: glass-card;
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            border: var(--section-border);
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .info-item:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        .info-item strong {
+            color: var(--primary);
+            display: inline-block;
+            width: 120px;
+            font-weight: 500;
+        }
+
+        .genre-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text);
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+        }
+
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .contact-form button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Modern button styles */
+        .modern-btn {
+            background: rgba(138, 43, 226, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 36px;
+            font-weight: 500;
+        }
+
+        .modern-btn:hover {
+            background: rgba(138, 43, 226, 0.3);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(138, 43, 226, 0.2);
+        }
+
+        .modern-btn i {
+            font-size: 0.9rem;
+        }
+
+        .modern-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .modern-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Auth form styles */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .auth-form h2 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+        
+        .form-group label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-left: 5px;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        select {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text);
+            width: calc(100% - 26px);
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+        }
+        
+        /* Radio stations grid */
+        .stations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+            justify-items: center;
+        }
+        
+        .station {
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 120px;
+        }
+        
+        .station:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        
+        .station.active {
+            border: 2px solid var(--primary);
+            background: rgba(138, 43, 226, 0.2);
+        }
+        
+        .station img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .station h3 {
+            font-size: 0.8rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            font-weight: 500;
+        }
+        
+        .station .likes {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 0.6rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .fav-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        
+        .fav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        /* Now playing section */
+        .now-playing {
+            position: relative;
+        }
+        
+        .radio-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .radio-info img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+        }
+        
+        .radio-details {
+            flex: 1;
+        }
+        
+        .radio-details h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .radio-details p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .radio-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .social-media {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(138, 43, 226, 0.3);
+        }
+        
+        /* Chat section */
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .chat-message {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .chat-message:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .chat-message .sender {
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+        
+        .chat-message .time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-left: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Equalizer animation */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            height: 20px;
+            margin-left: 15px;
+            gap: 3px;
+        }
+        
+        .equalizer-bar {
+            width: 3px;
+            background: var(--primary);
+            animation: equalize 1.5s infinite ease-in-out;
+            border-radius: 3px;
+        }
+        
+        .equalizer-bar:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+        .equalizer-bar:nth-child(2) { height: 12px; animation-delay: 0.3s; }
+        .equalizer-bar:nth-child(3) { height: 16px; animation-delay: 0.5s; }
+        .equalizer-bar:nth-child(4) { height: 12px; animation-delay: 0.2s; }
+        .equalizer-bar:nth-child(5) { height: 8px; animation-delay: 0.4s; }
+        
+        @keyframes equalize {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+        
+        /* Now playing header */
+        .now-playing h2 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .now-playing-title {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Category buttons */
+        .category-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover {
+            background: rgba(138, 43, 226, 0.3);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Main heading */
+        h1 {
+            background: linear-gradient(45deg, var(--primary), #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        /* Custom audio player */
+        .audio-player-container {
+            width: 100%;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .play-pause-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-pause-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .time-display {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Player controls */
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .page-btn {
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            min-width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .page-btn:hover {
+            background: rgba(138, 43, 226, 0.3);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        #searchRadio {
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        /* Mobile app banner */
+        .mobile-app-banner {
+            display: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .mobile-app-banner h3 {
+            margin: 0 0 10px;
+            font-weight: 500;
+        }
+
+        /* Playlist section */
+        .playlist-section {
+            display: none;
+            margin-top: 20px;
+            composes: glass-card;
+            padding: 20px;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .playlist-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .playlist-toggle:hover {
+            color: var(--primary-light);
+        }
+
+        .playlist-items {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .playlist-items.visible {
+            max-height: 500px;
+            margin-top: 10px;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .playlist-item:hover {
+            background: rgba(138, 43, 226, 0.1);
+            transform: translateX(5px);
+        }
+
+        .playlist-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .playlist-item-info {
+            flex: 1;
+        }
+
+        .playlist-item-info h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item-info p {
+            margin: 3px 0 0;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .playlist-action-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .playlist-action-btn:hover {
+            opacity: 1;
+            background: rgba(138, 43, 226, 0.2);
+        }
+
+        .empty-playlist {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Social login buttons */
+        .social-login-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .social-login-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .social-login-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .facebook-btn {
+            background-color: #3b5998;
+        }
+        
+        .twitter-btn {
+            background-color: #1DA1F2;
+        }
+        
+        .google-btn {
+            background-color: #DB4437;
+        }
+
+        /* Error messages */
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 3px;
+            display: none;
+            padding-left: 5px;
+        }
+
+        /* Success messages */
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Forgot password link */
+        .forgot-password {
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: -10px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Ad container */
+        .ad-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+            border: 1px dashed var(--glass-border);
+        }
+
+        .ad-container h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .stations {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .stations {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .detail-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-areas:
+                    "header"
+                    "auth"
+                    "player"
+                    "list"
+                    "detail"
+                    "flags";
+                grid-template-columns: 1fr;
+            }
+
+            .auth-section {
+                width: 100%;
+            }
+
+            .modern-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .radio-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .radio-details {
+                text-align: center;
+            }
+            
+            .radio-stats {
+                justify-content: center;
+            }
+            
+            .stations {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .station {
+                width: 100%;
+            }
+
+            .flags-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+
+            .mobile-app-banner {
+                display: none;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .app-buttons {
+                display: none;
+            }
+            
+            .audio-controls {
+                flex-wrap: wrap;
+            }
+            
+            .volume-control {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .volume-slider {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stations {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .auth-buttons {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .modern-btn {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .station img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            #searchRadio {
+                min-width: 100%;
+            }
+
+            .mobile-app-banner .app-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .mobile-app-banner .app-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .player-controls {
+                justify-content: center;
+            }
+        }
+
+        /* Yeni eklenen stiller */
+        /* Profil geçmiş ve favoriler için scroll */
+        .history-scroll-container, .favorites-scroll-container {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Scroll bar stilleri */
+        .history-scroll-container::-webkit-scrollbar,
+        .favorites-scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-scroll-container::-webkit-scrollbar-track,
+        .favorites-scroll-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .history-scroll-container::-webkit-scrollbar-thumb,
+        .favorites-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* İletişim formuna mesaj konusu ekleme */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text);
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .contact-form select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238A2BE2' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1><i class="fas fa-broadcast-tower"></i> KEREM Radyo Pro</h1>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn"><i class="fab fa-apple"></i> App Store</a>
+                    <a href="#" class="app-btn"><i class="fab fa-google-play"></i> Google Play</a>
+                </div>
+            </div>
+            <div class="auth-buttons">
+                <button id="themeToggle" class="modern-btn">
+                    <i class="fas fa-moon"></i> Tema
+                </button>
+                <button id="loginBtn" class="modern-btn"><i class="fas fa-sign-in-alt"></i> Giriş</button>
+                <button id="profileBtn" class="modern-btn hidden"><i class="fas fa-user"></i> Profil</button>
+                <button id="logoutBtn" class="modern-btn hidden"><i class="fas fa-sign-out-alt"></i> Çıkış</button>
+            </div>
+        </header>
+
+        <div class="auth-section">
+            <div class="turkey-flag">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg" alt="Türk Bayrağı" loading="lazy">
+                <div>TÜRKİYE</div>
+            </div>
+            
+            <div class="profile-container" id="profileContainer">
+                <div class="profile-header">
+                    <img src="https://via.placeholder.com/100" alt="Profil Resmi" class="profile-pic" id="profilePic">
+                    <div class="profile-info">
+                        <h2 id="profileName">Kullanıcı Adı</h2>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="favoriteCount">0</div>
+                                <div class="stat-label">Favori</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="likesGiven">0</div>
+                                <div class="stat-label">Beğeni</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-tabs">
+                    <div class="profile-tab active" data-tab="history">Geçmiş</div>
+                    <div class="profile-tab" data-tab="favorites">Favoriler</div>
+                    <div class="profile-tab" data-tab="settings">Ayarlar</div>
+                </div>
+
+                <div class="profile-content active" id="historyContent">
+                    <div class="history-scroll-container" id="historyItems">
+                        <!-- Dinleme geçmişi öğeleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <div class="profile-content" id="favoritesContent">
+                    <div class="favorites-scroll-container" id="favoriteItems">
+                        <!-- Favori radyolar buraya eklenecek -->
+                    </div>
+                </div>
+
+                <div class="profile-content" id="settingsContent">
+                    <div class="form-group">
+                        <label for="profileNameInput">Kullanıcı Adı</label>
+                        <input type="text" id="profileNameInput" placeholder="Kullanıcı adınız">
+                        <div class="error-message" id="nameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmailInput">E-posta</label>
+                        <input type="email" id="profileEmailInput" placeholder="E-posta adresiniz">
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePicInput">Profil Resmi</label>
+                        <input type="file" id="profilePicInput" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentPassword">Mevcut Şifre</label>
+                        <input type="password" id="currentPassword" placeholder="Mevcut şifreniz">
+                        <div class="error-message" id="currentPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Yeni Şifre</label>
+                        <input type="password" id="newPassword" placeholder="Yeni şifreniz (en az 6 karakter)">
+                        <div class="error-message" id="newPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Yeni Şifre Tekrar</label>
+                        <input type="password" id="confirmPassword" placeholder="Yeni şifrenizi tekrar girin">
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+                    <button id="saveProfileBtn" class="modern-btn primary">Kaydet</button>
+                    <div class="success-message" id="profileSuccess"></div>
+                </div>
+            </div>
+
+            <div id="loginForm" class="auth-form">
+                <h2><i class="fas fa-sign-in-alt"></i> Giriş Yap</h2>
+                <div class="form-group">
+                    <label for="loginEmail">E-posta</label>
+                    <input type="email" id="loginEmail" placeholder="E-posta adresiniz" required>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Şifre</label>
+                    <input type="password" id="loginPassword" placeholder="Şifreniz" required>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" id="forgotPassword">Şifremi unuttum</a>
+                </div>
+                <button type="button" id="submitLogin" class="modern-btn primary">
+                    <span id="loginBtnText">Giriş Yap</span>
+                    <span id="loginSpinner" class="spinner hidden"></span>
+                </button>
+                <div class="error-message" id="loginError"></div>
+                <div class="success-message" id="loginSuccess"></div>
+                <div class="social-login">
+                    <p>Veya sosyal medya ile giriş yap:</p>
+                    <div class="social-login-buttons">
+                        <div class="social-login-btn facebook-btn" onclick="socialLogin('facebook')">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div class="social-login-btn twitter-btn" onclick="socialLogin('twitter')">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <div class="social-login-btn google-btn" onclick="socialLogin('google')">
+                            <i class="fab fa-google"></i>
+                        </div>
+                    </div>
+                </div>
+                <p>Hesabınız yok mu? <a href="#" id="showRegister">Kayıt olun</a></p>
+            </div>
+
+            <div id="registerForm" class="auth-form hidden">
+                <h2><i class="fas fa-user-plus"></i> Kayıt Ol</h2>
+                <div class="form-group">
+                    <label for="registerName">Kullanıcı Adı</label>
+                    <input type="text" id="registerName" placeholder="Kullanıcı adınız" required>
+                    <div class="error-message" id="registerNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">E-posta</label>
+                    <input type="email" id="registerEmail" placeholder="E-posta adresiniz" required>
+                    <div class="error-message" id="registerEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Şifre</label>
+                    <input type="password" id="registerPassword" placeholder="Şifreniz (en az 6 karakter)" required>
+                    <div class="error-message" id="registerPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Şifre Tekrar</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Şifrenizi tekrar girin" required>
+                    <div class="error-message" id="registerConfirmPasswordError"></div>
+                </div>
+                <button type="button" id="submitRegister" class="modern-btn primary">
+                    <span id="registerBtnText">Kayıt Ol</span>
+                    <span id="registerSpinner" class="spinner hidden"></span>
+                </button>
+                <div class="error-message" id="registerError"></div>
+                <div class="success-message" id="registerSuccess"></div>
+                <div class="social-login">
+                    <p>Veya sosyal medya ile kayıt ol:</p>
+                    <div class="social-login-buttons">
+                        <div class="social-login-btn facebook-btn" onclick="socialLogin('facebook')">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div class="social-login-btn twitter-btn" onclick="socialLogin('twitter')">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <div class="social-login-btn google-btn" onclick="socialLogin('google')">
+                            <i class="fab fa-google"></i>
+                        </div>
+                    </div>
+                </div>
+                <p>Zaten hesabınız var mı? <a href="#" id="showLogin">Giriş yapın</a></p>
+            </div>
+        </div>
+
+        <div class="player-section">
+            <div class="now-playing">
+                <h2 class="now-playing-title">
+                    <i class="fas fa-music"></i> Şimdi Oynatılıyor
+                    <div class="equalizer">
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                    </div>
+                </h2>
+                <div class="radio-info">
+                    <img id="currentRadioImage" src="https://via.placeholder.com/150" alt="Radyo Logo" loading="lazy">
+                    <div class="radio-details">
+                        <h3 id="currentRadioName">Radyo Seçilmedi</h3>
+                        <p id="currentRadioGenre"></p>
+                        <div class="radio-stats">
+                            <span><i class="fas fa-headphones"></i> <span id="listenerCount">0</span> dinleyici</span>
+                            <span><i class="fas fa-heart"></i> <span id="likeCount">0</span> beğeni</span>
+                        </div>
+                        <div class="social-media">
+                            <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+                            <div class="social-icon"><i class="fab fa-twitter"></i></div>
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fab fa-youtube"></i></div>
+                            <div class="social-icon"><i class="fas fa-globe"></i></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Custom audio player -->
+                <div class="audio-player-container">
+                    <audio id="radioPlayer"></audio>
+                    <div class="audio-controls">
+                        <button class="play-pause-btn" id="playPauseBtn">
+                            <i class="fas fa-play" id="playPauseIcon"></i>
+                        </button>
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        <div class="time-display" id="timeDisplay">00:00</div>
+                        <div class="volume-control">
+                            <i class="fas fa-volume-up" id="volumeIcon"></i>
+                            <input type="range" min="0" max="100" value="80" class="volume-slider" id="volumeSlider">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="player-controls">
+                    <button id="favBtn" class="modern-btn hidden"><i class="far fa-heart"></i> Favori Ekle</button>
+                    <button id="likeBtn" class="modern-btn hidden"><i class="far fa-thumbs-up"></i> Beğen</button>
+                    <button id="addToPlaylistBtn" class="modern-btn hidden"><i class="fas fa-plus"></i> Listeye Ekle</button>
+                    <button id="shareBtn" class="modern-btn"><i class="fas fa-share-alt"></i> Paylaş</button>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <h2><i class="fas fa-comments"></i> Canlı Sohbet</h2>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message">
+                        <span class="sender">Sistem:</span>
+                        <span class="text">Sohbete hoş geldiniz!</span>
+                        <span class="time">12:00</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Mesajınızı yazın..." disabled>
+                    <button id="sendMessageBtn" class="modern-btn"><i class="fas fa-paper-plane"></i> Gönder</button>
+                </div>
+            </div>
+
+            <div class="playlist-section" id="playlistSection">
+                <div class="playlist-header">
+                    <h2><i class="fas fa-list-ol"></i> Çalma Listem</h2>
+                    <button class="playlist-toggle" id="playlistToggle">
+                        <i class="fas fa-chevron-down"></i> Göster
+                    </button>
+                </div>
+                <div class="playlist-items" id="playlistItems">
+                    <div class="empty-playlist">Çalma listeniz boş</div>
+                </div>
+            </div>
+
+            <div class="mobile-app-banner" style="display:none;">
+                <h3>Mobil Uygulamamızı İndirin!</h3>
+                <p>Radyoları dilediğiniz yerde dinleyin, çevrimdışı dinleme özelliğinden yararlanın.</p>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn"><i class="fab fa-apple"></i> App Store</a>
+                    <a href="#" class="app-btn"><i class="fab fa-google-play"></i> Google Play</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="radio-list">
+            <h2><i class="fas fa-list"></i> Radyo İstasyonları</h2>
+            <div class="filter-controls">
+                <input type="text" id="searchRadio" placeholder="Radyo ara...">
+                <select id="cityFilter" class="modern-btn" style="width: 100%; max-width: 200px;">
+                    <option value="">Tüm Şehirler</option>
+                    <option value="İstanbul">İstanbul</option>
+                    <option value="Ankara">Ankara</option>
+                    <option value="İzmir">İzmir</option>
+                    <option value="Bursa">Bursa</option>
+                    <option value="Adana">Adana</option>
+                    <option value="Antalya">Antalya</option>
+                    <option value="Konya">Konya</option>
+                    <option value="Gaziantep">Gaziantep</option>
+                    <option value="Şanlıurfa">Şanlıurfa</option>
+                    <option value="Mersin">Mersin</option>
+                    <option value="Diyarbakır">Diyarbakır</option>
+                    <option value="Kayseri">Kayseri</option>
+                    <option value="Samsun">Samsun</option>
+                    <option value="Denizli">Denizli</option>
+                    <option value="Eskişehir">Eskişehir</option>
+                    <option value="Trabzon">Trabzon</option>
+                </select>
+                <button id="showFavoritesBtn" class="modern-btn hidden">Favorilerim</button>
+                <button id="sortByPopularBtn" class="modern-btn"><i class="fas fa-fire"></i> Popüler</button>
+            </div>
+            <div class="category-filters">
+                <h3>Kategoriler</h3>
+                <div class="category-buttons">
+                    <button class="category-btn active" data-category="all">Tümü</button>
+                    <button class="category-btn" data-category="Pop">Pop</button>
+                    <button class="category-btn" data-category="Rock">Rock</button>
+                    <button class="category-btn" data-category="Jazz">Jazz</button>
+                    <button class="category-btn" data-category="Türkçe">Türkçe</button>
+                    <button class="category-btn" data-category="Elektronik">Elektronik</button>
+                </div>
+            </div>
+
+            <div class="stations" id="stationsList">
+                <!-- Radyolar buraya eklenecek -->
+            </div>
+            
+            <div class="pagination" id="pagination">
+                <!-- Sayfa butonları buraya eklenecek -->
+            </div>
+        </div>
+
+        <div class="detail-container" id="detailContainer">
+            <h2><i class="fas fa-info-circle"></i> Radyo Detayları</h2>
+            <div class="detail-content">
+                <div class="radio-info-container">
+                    <h3><i class="fas fa-broadcast-tower"></i> Radyo Bilgileri</h3>
+                    <div class="info-item">
+                        <strong>Radyo Adı:</strong> <span id="detailRadioName">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Şehir:</strong> <span id="detailRadioCity">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Web Sitesi:</strong> <a id="detailRadioWebsite" href="#" target="_blank">-</a>
+                    </div>
+                    <div class="info-item">
+                        <strong>Müzik Türü:</strong> 
+                        <span id="detailRadioGenre">-</span>
+                        <span id="detailRadioGenreTag" class="genre-tag">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Telefon:</strong> <span id="detailRadioPhone">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Beğeni Sayısı:</strong> <span id="detailRadioLikes">-</span>
+                    </div>
+                    <div class="ad-container">
+                        <h3><i class="fas fa-ad"></i> Reklam Alanı</h3>
+                        <p>Burada reklam verebilirsiniz</p>
+                        <button class="modern-btn" id="adButton">Reklam Ver</button>
+                    </div>
+                </div>
+                
+                <div class="contact-container">
+                    <h3><i class="fas fa-envelope"></i> İletişim Paneli</h3>
+                    <p>Kerem radyoya mesaj yollayın</p>
+                    <form class="contact-form" id="contactForm">
+                        <input type="text" id="contactName" placeholder="Adınız" required>
+                        <input type="email" id="contactEmail" placeholder="E-posta Adresiniz" required>
+                        <select id="contactSubject" required>
+                            <option value="">Mesaj Konusu Seçin</option>
+                            <option value="suggestion">Öneri</option>
+                            <option value="complaint">Şikayet</option>
+                            <option value="advertisement">Reklam</option>
+                            <option value="technical">Teknik Sorun</option>
+                            <option value="other">Diğer</option>
+                        </select>
+                        <textarea id="contactMessage" placeholder="Mesajınız" required></textarea>
+                        <button type="submit" class="modern-btn primary">Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="flags-container">
+            <h3 class="flags-title"><i class="fas fa-globe-europe"></i> Ülke Radyoları</h3>
+            <div class="flags-grid">
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/almanya', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="Almanya Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Almanya</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/fransa', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="Fransa Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Fransa</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/ispanya', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="İspanya Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">İspanya</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/italya', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Flag_of_Italy.svg" alt="İtalya Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">İtalya</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/hollanda', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg" alt="Hollanda Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Hollanda</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/belcika', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Belgium.svg" alt="Belçika Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Belçika</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/isvec', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg" alt="İsveç Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">İsveç</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/norvec', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg" alt="Norveç Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Norveç</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/finlandiya', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Finland.svg" alt="Finlandiya Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Finlandiya</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/isvicre', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_Switzerland_%28Pantone%29.svg" alt="İsviçre Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">İsviçre</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/yunanistan', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg" alt="Yunanistan Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Yunanistan</span>
+                </div>
+                <div class="flag-item" onclick="window.open('https://www.keremradyo.com/avusturya', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" alt="Avusturya Bayrağı" class="flag-img" loading="lazy">
+                    <span class="flag-name">Avusturya</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification element -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Bildirim mesajı</span>
+    </div>
+
+    <script>
+        // Uygulama durumu
+        const state = {
+            currentUser: null,
+            currentRadio: null,
+            stations: [
+                {
+                    id: 1, 
+                    name: "Power FM", 
+                    genre: "En yeni pop şarkılar",
+                    category: "Pop",
+                    streamUrl: "https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/power-fm.png",
+                    phone: "+90 212 123 4567",
+                    likes: 2453,
+                    city: "İstanbul",
+                    website: "https://www.powerfm.com.tr",
+                    location: { lat: 41.0082, lng: 28.9784 },
+                    socialMedia: {
+                        facebook: "https://facebook.com/powerfm",
+                        twitter: "https://twitter.com/powerfm",
+                        instagram: "https://instagram.com/powerfm",
+                        youtube: "https://youtube.com/powerfm"
+                    }
+                },
+                {
+                    id: 2,
+                    name: "ALEM FM",
+                    genre: "Türkçe pop ve arabesk",
+                    category: "Türkçe",
+                    streamUrl: "https://turkmedya.radyotvonline.net/alemfmaac",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/alem-fm.jpg",
+                    phone: "+90 212 234 5678",
+                    likes: 1892,
+                    city: "İstanbul",
+                    website: "https://www.alemfm.com.tr",
+                    location: { lat: 41.0151, lng: 28.9795 },
+                    socialMedia: {
+                        facebook: "https://facebook.com/alemfm",
+                        twitter: "https://twitter.com/alemfm",
+                        instagram: "https://instagram.com/alemfm"
+                    }
+                },
+                {
+                    id: 3,
+                    name: "Kral FM",
+                    genre: "Klasik ve modern rock",
+                    category: "Rock",
+                    streamUrl: "http://kralwmp.radyotvonline.com/",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/kral-fm.jpg",
+                    phone: "+90 212 345 6789",
+                    likes: 3120,
+                    city: "İstanbul",
+                    website: "https://www.kralfm.com.tr",
+                    location: { lat: 41.0256, lng: 28.9741 },
+                    socialMedia: {
+                        facebook: "https://facebook.com/kralfm",
+                        instagram: "https://instagram.com/kralfm",
+                        youtube: "https://youtube.com/kralfm"
+                    }
+                },
+                {
+                    id: 4,
+                    name: "Radyo 35",
+                    genre: "Karışık müzik",
+                    category: "Pop",
+                    streamUrl: "https://yayin.turkhosted.com/6012/stream",
+                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDwxFRq8n1jJg6YSoMnsY-uRVwCB_MzvhgEw&s",
+                    phone: "+90 232 456 7890",
+                    likes: 876,
+                    city: "İzmir",
+                    website: "https://www.radyo35.com",
+                    location: { lat: 38.4237, lng: 27.1428 }
+                },
+                {
+                    id: 5,
+                    name: "Radyo EGE",
+                    genre: "Yerel müzikler",
+                    category: "Pop",
+                    streamUrl: "https://istek.ozelip.com/radyoege",
+                    imageUrl: "https://cdn-profiles.tunein.com/s14315/images/logog.png",
+                    phone: "+90 232 567 8901",
+                    likes: 543,
+                    city: "İzmir",
+                    website: "https://www.radyoegem.com",
+                    location: { lat: 38.4192, lng: 27.1287 }
+                },
+                {
+                    id: 6,
+                    name: "Baba Radyo",
+                    genre: "Karışık",
+                    category: "Pop",
+                    streamUrl: "https://babaradyo.turkhosted.com/best/babaradyo.stream/playlist.m3u8",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/baba-radyo.png",
+                    phone: "+90 312 678 9012",
+                    likes: 1298,
+                    city: "Ankara",
+                    website: "https://www.babaradyo.com",
+                    location: { lat: 39.9334, lng: 32.8597 }
+                },
+                {
+                    id: 7,
+                    name: "Joy FM",
+                    genre: "Jazz ve soul müzik",
+                    category: "Jazz",
+                    streamUrl: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FMAAC.aac",
+                    imageUrl: "https://cdn-profiles.tunein.com/s14297/images/logog.png?t=1",
+                    phone: "+90 212 789 0123",
+                    likes: 987,
+                    city: "İstanbul",
+                    website: "https://www.joyfm.com.tr",
+                    location: { lat: 41.0425, lng: 29.0109 }
+                },
+                {
+                    id: 8,
+                    name: "Power TÜRK",
+                    genre: "Türkçe pop",
+                    category: "Türkçe",
+                    streamUrl: "https://radioly.app/radio/power-turk-en-iyiler/",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/power-turk-fm.png",
+                    phone: "+90 212 890 1234",
+                    likes: 2105,
+                    city: "İstanbul",
+                    website: "https://www.powerturk.com",
+                    location: { lat: 41.0586, lng: 29.0085 }
+                },
+                {
+                    id: 9,
+                    name: "Best FM",
+                    genre: "Karışık",
+                    category: "Pop",
+                    streamUrl: "http://46.20.7.126/;stream.mp3",
+                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpE4WUhcNLjHg7r3GBzuQrmKXjb8LCsiDP0g&s",
+                    phone: "+90 212 901 2345",
+                    likes: 1567,
+                    city: "İstanbul",
+                    website: "https://www.bestfm.com.tr",
+                    location: { lat: 41.0724, lng: 29.0063 }
+                },
+                {
+                    id: 10,
+                    name: "Number 1 FM",
+                    genre: "Türkçe pop",
+                    category: "Türkçe",
+                    streamUrl: "https://n10101m.mediatriple.net/numberoneturk",
+                    imageUrl: "https://radyolar.net.tr/uploads/img/number-1-fm.png",
+                    phone: "+216 425 36 40",
+                    likes: 1876,
+                    city: "İstanbul",
+                    website: "https://www.numberonefm.com",
+                    location: { lat: 41.0082, lng: 28.9784 }
+                },
+                {
+                    id: 11,
+                    name: "Süper FM",
+                    genre: "Sınırsız Hit Müzik",
+                    category: "Pop",
+                    streamUrl: "https://playerservices.streamtheworld.com/api/livestream-redirect/SUPER_FM_SC?/; ",
+                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmAdwDj6MWVunsXAPVmwzFdkk8B-vXLO9nA3Tv-NHaB-iax-WtsnUbdV6JItuwZgkBDq4&usqp=CAU",
+                    phone: "+90 212 368 6200",
+                    likes: 1876,
+                    city: "İstanbul",
+                    website: "https://superfm.com.tr/",
+                    location: { lat: 41.0082, lng: 28.9784 },socialMedia: {
+                        facebook: "https://www.facebook.com/superfm/",
+                        instagram: "https://www.instagram.com/superfm/",
+                        twitter: "https://x.com/super_fm"
+                    }
+                },
+                {
+                    id: 12,
+                    name: "Radyo Fenomen",
+                    genre: "Maksimum Hit Müzik",
+                    category: "Pop",
+                    streamUrl: "https://live.radyofenomen.com/fenomen/128/icecast.audio",
+                    imageUrl: "https://cdn.radyofenomen.com/image/200x200/u/Channels/v2/logo_20.png?v=",
+                    phone: "+90 212 368 6200",
+                    likes: 1876,
+                    city: "İstanbul",
+                    website: "https://www.radyofenomen.com",
+                    socialMedia: {
+                        facebook: "https://www.facebook.com/radyofenomen",
+                        instagram: "https://www.instagram.com/radyofenomen/",
+                        twitter: "https://x.com/radyofenomen"
+                    }
+                },
+            ],
+            favorites: [],
+            messages: [],
+            currentPage: 1,
+            itemsPerPage: 25,
+            likedStations: [],
+            listeningHistory: [],
+            playlist: [],
+            metadataInterval: null,
+            isPlaying: false,
+            currentTime: 0,
+            duration: 0,
+            volume: 0.8
+        };
+
+        // DOM elementleri
+        const elements = {
+            loginBtn: document.getElementById('loginBtn'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            profileBtn: document.getElementById('profileBtn'),
+            loginForm: document.getElementById('loginForm'),
+            registerForm: document.getElementById('registerForm'),
+            submitLogin: document.getElementById('submitLogin'),
+            submitRegister: document.getElementById('submitRegister'),
+            showLogin: document.getElementById('showLogin'),
+            showRegister: document.getElementById('showRegister'),
+            loginEmail: document.getElementById('loginEmail'),
+            loginPassword: document.getElementById('loginPassword'),
+            loginEmailError: document.getElementById('loginEmailError'),
+            loginPasswordError: document.getElementById('loginPasswordError'),
+            loginError: document.getElementById('loginError'),
+            loginSuccess: document.getElementById('loginSuccess'),
+            loginBtnText: document.getElementById('loginBtnText'),
+            loginSpinner: document.getElementById('loginSpinner'),
+            forgotPassword: document.getElementById('forgotPassword'),
+            registerName: document.getElementById('registerName'),
+            registerEmail: document.getElementById('registerEmail'),
+            registerPassword: document.getElementById('registerPassword'),
+            registerConfirmPassword: document.getElementById('registerConfirmPassword'),
+            registerNameError: document.getElementById('registerNameError'),
+            registerEmailError: document.getElementById('registerEmailError'),
+            registerPasswordError: document.getElementById('registerPasswordError'),
+            registerConfirmPasswordError: document.getElementById('registerConfirmPasswordError'),
+            registerError: document.getElementById('registerError'),
+            registerSuccess: document.getElementById('registerSuccess'),
+            registerBtnText: document.getElementById('registerBtnText'),
+            registerSpinner: document.getElementById('registerSpinner'),
+
+            currentRadioName: document.getElementById('currentRadioName'),
+            currentRadioImage: document.getElementById('currentRadioImage'),
+            currentRadioGenre: document.getElementById('currentRadioGenre'),
+            radioPlayer: document.getElementById('radioPlayer'),
+            playPauseBtn: document.getElementById('playPauseBtn'),
+            playPauseIcon: document.getElementById('playPauseIcon'),
+            progressContainer: document.getElementById('progressContainer'),
+            progressBar: document.getElementById('progressBar'),
+            timeDisplay: document.getElementById('timeDisplay'),
+            volumeIcon: document.getElementById('volumeIcon'),
+            volumeSlider: document.getElementById('volumeSlider'),
+            favBtn: document.getElementById('favBtn'),
+            likeBtn: document.getElementById('likeBtn'),
+            addToPlaylistBtn: document.getElementById('addToPlaylistBtn'),
+            shareBtn: document.getElementById('shareBtn'),
+            listenerCount: document.getElementById('listenerCount'),
+            likeCount: document.getElementById('likeCount'),
+
+            stationsList: document.getElementById('stationsList'),
+            searchRadio: document.getElementById('searchRadio'),
+            cityFilter: document.getElementById('cityFilter'),
+            showFavoritesBtn: document.getElementById('showFavoritesBtn'),
+            sortByPopularBtn: document.getElementById('sortByPopularBtn'),
+            categoryButtons: document.querySelectorAll('.category-btn'),
+            pagination: document.getElementById('pagination'),
+
+            chatMessages: document.getElementById('chatMessages'),
+            messageInput: document.getElementById('messageInput'),
+            sendMessageBtn: document.getElementById('sendMessageBtn'),
+
+            detailContainer: document.getElementById('detailContainer'),
+            detailRadioName: document.getElementById('detailRadioName'),
+            detailRadioCity: document.getElementById('detailRadioCity'),
+            detailRadioWebsite: document.getElementById('detailRadioWebsite'),
+            detailRadioGenre: document.getElementById('detailRadioGenre'),
+            detailRadioGenreTag: document.getElementById('detailRadioGenreTag'),
+            detailRadioPhone: document.getElementById('detailRadioPhone'),
+            detailRadioLikes: document.getElementById('detailRadioLikes'),
+            contactForm: document.getElementById('contactForm'),
+            contactSubject: document.getElementById('contactSubject'),
+            adButton: document.getElementById('adButton'),
+
+            playlistSection: document.getElementById('playlistSection'),
+            playlistItems: document.getElementById('playlistItems'),
+            playlistToggle: document.getElementById('playlistToggle'),
+
+            profileContainer: document.getElementById('profileContainer'),
+            profilePic: document.getElementById('profilePic'),
+            profileName: document.getElementById('profileName'),
+            favoriteCount: document.getElementById('favoriteCount'),
+            likesGiven: document.getElementById('likesGiven'),
+            historyItems: document.getElementById('historyItems'),
+            favoriteItems: document.getElementById('favoriteItems'),
+            profileTabs: document.querySelectorAll('.profile-tab'),
+            profileContents: document.querySelectorAll('.profile-content'),
+            profileNameInput: document.getElementById('profileNameInput'),
+            profileEmailInput: document.getElementById('profileEmailInput'),
+            profilePicInput: document.getElementById('profilePicInput'),
+            currentPassword: document.getElementById('currentPassword'),
+            newPassword: document.getElementById('newPassword'),
+            confirmPassword: document.getElementById('confirmPassword'),
+            saveProfileBtn: document.getElementById('saveProfileBtn'),
+            nameError: document.getElementById('nameError'),
+            emailError: document.getElementById('emailError'),
+            currentPasswordError: document.getElementById('currentPasswordError'),
+            newPasswordError: document.getElementById('newPasswordError'),
+            confirmPasswordError: document.getElementById('confirmPasswordError'),
+            profileSuccess: document.getElementById('profileSuccess'),
+            
+            notification: document.getElementById('notification'),
+            notificationText: document.getElementById('notificationText')
+        };
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', () => {
+            initEventListeners();
+            sortStationsByLikes();
+            renderStations();
+            setupPagination();
+            checkMobile();
+            loadUserFromLocalStorage();
+            setupAudioPlayer();
+            registerServiceWorker();
+        });
+
+        // Service Worker kaydı
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            }
+        }
+
+        // Event listener'ları başlat
+        function initEventListeners() {
+            elements.loginBtn.addEventListener('click', () => toggleAuthForms('login'));
+            elements.profileBtn.addEventListener('click', toggleProfile);
+            elements.showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms('login');
+            });
+            elements.showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms('register');
+            });
+            elements.submitLogin.addEventListener('click', handleLogin);
+            elements.submitRegister.addEventListener('click', handleRegister);
+            elements.logoutBtn.addEventListener('click', logout);
+            elements.forgotPassword.addEventListener('click', handleForgotPassword);
+
+            elements.searchRadio.addEventListener('input', filterStations);
+            elements.cityFilter.addEventListener('change', filterStations);
+            elements.showFavoritesBtn.addEventListener('click', showFavorites);
+            elements.sortByPopularBtn.addEventListener('click', sortStationsByLikes);
+
+            elements.categoryButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const selectedCategory = e.target.dataset.category;
+                    state.currentPage = 1;
+                    filterStationsByCategory(selectedCategory);
+                    setupPagination();
+                    
+                    elements.categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
+            });
+
+            elements.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            elements.sendMessageBtn.addEventListener('click', sendMessage);
+            
+            elements.likeBtn.addEventListener('click', toggleLike);
+            elements.favBtn.addEventListener('click', toggleFavoriteFromPlayer);
+            elements.addToPlaylistBtn.addEventListener('click', addToPlaylist);
+            elements.shareBtn.addEventListener('click', shareRadio);
+
+            elements.contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                sendContactMessage();
+            });
+
+            elements.adButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                showNotification('Reklam vermek için lütfen iletişim formunu doldurunuz', 'info');
+            });
+
+            elements.profileTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    switchProfileTab(tabId);
+                });
+            });
+
+            elements.profilePicInput.addEventListener('change', handleProfilePicUpload);
+            elements.saveProfileBtn.addEventListener('click', saveProfile);
+
+            // Radyo değiştiğinde dinleme geçmişini güncelle
+            elements.radioPlayer.addEventListener('play', updateListeningHistory);
+            elements.radioPlayer.addEventListener('play', () => {
+                state.isPlaying = true;
+                elements.playPauseIcon.classList.remove('fa-play');
+                elements.playPauseIcon.classList.add('fa-pause');
+                startMetadataFetching();
+            });
+            elements.radioPlayer.addEventListener('pause', () => {
+                state.isPlaying = false;
+                elements.playPauseIcon.classList.remove('fa-pause');
+                elements.playPauseIcon.classList.add('fa-play');
+                stopMetadataFetching();
+            });
+
+            // Çalma listesi toggle butonu
+            elements.playlistToggle.addEventListener('click', togglePlaylistVisibility);
+        }
+
+        // Metadata bilgilerini al
+        function startMetadataFetching() {
+            if (!state.currentRadio) return;
+            
+            // Önceki interval'i temizle
+            stopMetadataFetching();
+            
+            // Metadata endpoint'i (örnek bir API)
+            const metadataUrl = `https://api.keremradyo.com/metadata?station=${encodeURIComponent(state.currentRadio.name)}`;
+            
+            // İlk bilgiyi hemen al
+            fetchMetadata(metadataUrl);
+            
+            // Her 30 saniyede bir metadata güncelle
+            state.metadataInterval = setInterval(() => {
+                fetchMetadata(metadataUrl);
+            }, 30000);
+        }
+        
+        function stopMetadataFetching() {
+            if (state.metadataInterval) {
+                clearInterval(state.metadataInterval);
+                state.metadataInterval = null;
+            }
+        }
+        
+        function fetchMetadata(url) {
+            // Gerçek uygulamada burada bir API çağrısı yapılır
+            // Demo amaçlı rastgele şarkı bilgisi oluşturuyoruz
+            const songs = [
+            
+            ];
+            
+            const artists = [
+            
+            ];
+            
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            const currentSong = songs[randomIndex];
+            const currentArtist = artists[randomIndex];
+            
+            // Şimdi çalan bilgisini güncelle
+            elements.currentRadioGenre.textContent = `${currentArtist} - ${currentSong}`;
+            
+            // Bildirim göster (sadece mobilde)
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                showNotification(`Şimdi çalıyor: ${currentSong}`, 'info');
+            }
+        }
+
+        // Özel audio player ayarları
+        function setupAudioPlayer() {
+            // Play/pause butonu
+            elements.playPauseBtn.addEventListener('click', togglePlayPause);
+            
+            // Progress bar kontrolü
+            elements.progressContainer.addEventListener('click', setProgress);
+            
+            // Volume kontrolü
+            elements.volumeSlider.addEventListener('input', setVolume);
+            
+            // Timeupdate event
+            elements.radioPlayer.addEventListener('timeupdate', updateProgress);
+            
+            // Volume icon click
+            elements.volumeIcon.addEventListener('click', toggleMute);
+            
+            // Başlangıçta ses seviyesini ayarla
+            elements.radioPlayer.volume = state.volume;
+            elements.volumeSlider.value = state.volume * 100;
+        }
+
+        // Play/pause toggle
+        function togglePlayPause() {
+            if (state.isPlaying) {
+                elements.radioPlayer.pause();
+            } else {
+                if (state.currentRadio) {
+                    elements.radioPlayer.src = state.currentRadio.streamUrl;
+                    elements.radioPlayer.play().catch(e => {
+                        showNotification('Radyo oynatılırken hata oluştu', 'error');
+                    });
+                } else {
+                    showNotification('Lütfen önce bir radyo seçin', 'warning');
+                }
+            }
+        }
+
+        // Progress bar güncelleme
+        function updateProgress() {
+            const { duration, currentTime } = elements.radioPlayer;
+            const progressPercent = (currentTime / duration) * 100;
+            elements.progressBar.style.width = `${progressPercent}%`;
+            
+            // Zaman gösterimi
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            elements.timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        // Progress bar tıklama
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = elements.radioPlayer.duration;
+            elements.radioPlayer.currentTime = (clickX / width) * duration;
+        }
+
+        // Ses seviyesi ayarla
+        function setVolume() {
+            const volume = this.value / 100;
+            elements.radioPlayer.volume = volume;
+            state.volume = volume;
+            
+            // Volume icon güncelleme
+            if (volume === 0) {
+                elements.volumeIcon.className = 'fas fa-volume-mute';
+            } else if (volume < 0.5) {
+                elements.volumeIcon.className = 'fas fa-volume-down';
+            } else {
+                elements.volumeIcon.className = 'fas fa-volume-up';
+            }
+        }
+
+        // Sesi aç/kapa
+        function toggleMute() {
+            if (elements.radioPlayer.volume > 0) {
+                elements.radioPlayer.volume = 0;
+                elements.volumeSlider.value = 0;
+                elements.volumeIcon.className = 'fas fa-volume-mute';
+            } else {
+                elements.radioPlayer.volume = state.volume;
+                elements.volumeSlider.value = state.volume * 100;
+                elements.volumeIcon.className = state.volume < 0.5 ? 'fas fa-volume-down' : 'fas fa-volume-up';
+            }
+        }
+
+        // Bildirim göster
+        function showNotification(message, type = 'success') {
+            elements.notificationText.textContent = message;
+            
+            // Tip'e göre stil ayarla
+            switch(type) {
+                case 'error':
+                    elements.notification.style.background = 'var(--error)';
+                    break;
+                case 'warning':
+                    elements.notification.style.background = 'var(--warning)';
+                    break;
+                case 'info':
+                    elements.notification.style.background = 'var(--info)';
+                    break;
+                default:
+                    elements.notification.style.background = 'var(--primary)';
+            }
+            
+            elements.notification.classList.add('show');
+            
+            // 3 saniye sonra gizle
+            setTimeout(() => {
+                elements.notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Mobil cihaz kontrolü
+        function checkMobile() {
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                // Mobil uygulama banner'ı gösterilmiyor
+            }
+        }
+
+        // LocalStorage'dan kullanıcıyı yükle
+        function loadUserFromLocalStorage() {
+            const userData = localStorage.getItem('keremRadyoUser');
+            if (userData) {
+                state.currentUser = JSON.parse(userData);
+                state.favorites = JSON.parse(localStorage.getItem('keremRadyoFavorites')) || [];
+                state.likedStations = JSON.parse(localStorage.getItem('keremRadyoLikedStations')) || [];
+                state.listeningHistory = JSON.parse(localStorage.getItem('keremRadyoHistory')) || [];
+                state.playlist = JSON.parse(localStorage.getItem('keremRadyoPlaylist')) || [];
+                
+                updateUIAfterAuth();
+            }
+        }
+
+        // Kullanıcı verilerini LocalStorage'a kaydet
+        function saveUserToLocalStorage() {
+            if (state.currentUser) {
+                localStorage.setItem('keremRadyoUser', JSON.stringify(state.currentUser));
+                localStorage.setItem('keremRadyoFavorites', JSON.stringify(state.favorites));
+                localStorage.setItem('keremRadyoLikedStations', JSON.stringify(state.likedStations));
+                localStorage.setItem('keremRadyoHistory', JSON.stringify(state.listeningHistory));
+                localStorage.setItem('keremRadyoPlaylist', JSON.stringify(state.playlist));
+            }
+        }
+
+        // Çalma listesini göster/gizle
+        function togglePlaylistVisibility() {
+            const isVisible = elements.playlistItems.classList.contains('visible');
+            
+            if (!isVisible) {
+                elements.playlistItems.classList.add('visible');
+                elements.playlistToggle.innerHTML = '<i class="fas fa-chevron-up"></i> Gizle';
+            } else {
+                elements.playlistItems.classList.remove('visible');
+                elements.playlistToggle.innerHTML = '<i class="fas fa-chevron-down"></i> Göster';
+            }
+        }
+
+        // Profil sayfasını göster/gizle
+        function toggleProfile() {
+            if (elements.profileContainer.style.display === 'block') {
+                elements.profileContainer.style.display = 'none';
+                elements.loginForm.style.display = 'block';
+                elements.registerForm.style.display = 'none';
+            } else {
+                if (state.currentUser) {
+                    elements.profileContainer.style.display = 'block';
+                    elements.loginForm.style.display = 'none';
+                    elements.registerForm.style.display = 'none';
+                    loadProfileData();
+                } else {
+                    toggleAuthForms('login');
+                }
+            }
+        }
+
+        // Profil sekmesini değiştir
+        function switchProfileTab(tabId) {
+            elements.profileTabs.forEach(tab => {
+                if (tab.dataset.tab === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            elements.profileContents.forEach(content => {
+                if (content.id === `${tabId}Content`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Profil verilerini yükle
+        function loadProfileData() {
+            if (!state.currentUser) return;
+
+            elements.profileName.textContent = state.currentUser.name;
+            elements.profileNameInput.value = state.currentUser.name;
+            elements.profileEmailInput.value = state.currentUser.email;
+            elements.favoriteCount.textContent = state.favorites.length;
+            elements.likesGiven.textContent = state.likedStations.length;
+
+            // Profil resmini yükle
+            if (state.currentUser.profilePic) {
+                elements.profilePic.src = state.currentUser.profilePic;
+            }
+
+            // Dinleme geçmişini yükle (en fazla 5 göster)
+            renderListeningHistory();
+
+            // Favorileri yükle (en fazla 5 göster)
+            renderFavoriteStations();
+        }
+
+        // Dinleme geçmişini render et (en fazla 5 göster)
+        function renderListeningHistory() {
+            elements.historyItems.innerHTML = '';
+            
+            if (state.listeningHistory.length === 0) {
+                elements.historyItems.innerHTML = '<div class="empty-playlist">Dinleme geçmişiniz boş</div>';
+                return;
+            }
+            
+            // Son 5 kaydı al
+            const recentHistory = state.listeningHistory.slice().reverse().slice(0, 5);
+            
+            recentHistory.forEach(item => {
+                const station = state.stations.find(s => s.id === item.stationId);
+                if (!station) return;
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <img src="${station.imageUrl}" alt="${station.name}" loading="lazy">
+                    <div class="history-info">
+                        <h4>${station.name}</h4>
+                        <p>${station.genre}</p>
+                    </div>
+                    <div class="history-time">${formatTime(item.time)}</div>
+                `;
+                
+                historyItem.addEventListener('click', () => {
+                    selectRadio(station);
+                    playRadio(station.streamUrl);
+                });
+                
+                elements.historyItems.appendChild(historyItem);
+            });
+        }
+
+        // Favori radyoları render et (en fazla 5 göster)
+        function renderFavoriteStations() {
+            elements.favoriteItems.innerHTML = '';
+            
+            if (state.favorites.length === 0) {
+                elements.favoriteItems.innerHTML = '<div class="empty-playlist">Favori radyonuz yok</div>';
+                return;
+            }
+            
+            // İlk 5 favoriyi göster
+            const favoritesToShow = state.favorites.slice(0, 5);
+            
+            favoritesToShow.forEach(station => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-item';
+                favoriteItem.innerHTML = `
+                    <img src="${station.imageUrl}" alt="${station.name}" loading="lazy">
+                    <div class="favorite-info">
+                        <h4>${station.name}</h4>
+                        <p>${station.genre}</p>
+                    </div>
+                `;
+                
+                favoriteItem.addEventListener('click', () => {
+                    selectRadio(station);
+                    playRadio(station.streamUrl);
+                });
+                
+                elements.favoriteItems.appendChild(favoriteItem);
+            });
+        }
+
+        // Profil resmini yükle
+        function handleProfilePicUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                elements.profilePic.src = event.target.result;
+                if (state.currentUser) {
+                    state.currentUser.profilePic = event.target.result;
+                    saveUserToLocalStorage();
+                    showNotification('Profil resmi başarıyla güncellendi');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Profil bilgilerini kaydet
+        function saveProfile() {
+            if (!state.currentUser) return;
+            
+            // Hata mesajlarını temizle
+            clearErrorMessages();
+            
+            // Doğrulama
+            let isValid = true;
+            
+            // Kullanıcı adı doğrulama
+            if (!elements.profileNameInput.value.trim()) {
+                elements.nameError.textContent = 'Kullanıcı adı gereklidir';
+                elements.nameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // E-posta doğrulama
+            if (!elements.profileEmailInput.value.trim()) {
+                elements.emailError.textContent = 'E-posta gereklidir';
+                elements.emailError.style.display = 'block';
+                isValid = false;
+            } else if (!validateEmail(elements.profileEmailInput.value)) {
+                elements.emailError.textContent = 'Geçerli bir e-posta adresi girin';
+                elements.emailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Şifre değişikliği kontrolü
+            const currentPassword = elements.currentPassword.value;
+            const newPassword = elements.newPassword.value;
+            const confirmPassword = elements.confirmPassword.value;
+            
+            if (newPassword || confirmPassword || currentPassword) {
+                if (!currentPassword) {
+                    elements.currentPasswordError.textContent = 'Mevcut şifre gereklidir';
+                    elements.currentPasswordError.style.display = 'block';
+                    isValid = false;
+                } else if (currentPassword !== state.currentUser.password) {
+                    elements.currentPasswordError.textContent = 'Mevcut şifre yanlış';
+                    elements.currentPasswordError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (newPassword.length < 6) {
+                    elements.newPasswordError.textContent = 'Şifre en az 6 karakter olmalıdır';
+                    elements.newPasswordError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    elements.confirmPasswordError.textContent = 'Şifreler eşleşmiyor';
+                    elements.confirmPasswordError.style.display = 'block';
+                    isValid = false;
+                }
+            }
+            
+            if (!isValid) return;
+            
+            // Şifre değişikliği
+            if (newPassword) {
+                state.currentUser.password = newPassword;
+                showNotification('Şifreniz başarıyla güncellendi');
+            }
+            
+            // Diğer profil bilgilerini güncelle
+            state.currentUser.name = elements.profileNameInput.value;
+            state.currentUser.email = elements.profileEmailInput.value;
+            
+            elements.profileName.textContent = state.currentUser.name;
+            
+            // Başarı mesajını göster
+            elements.profileSuccess.textContent = 'Profil bilgileriniz başarıyla kaydedildi!';
+            elements.profileSuccess.style.display = 'block';
+            
+            // 3 saniye sonra başarı mesajını gizle
+            setTimeout(() => {
+                elements.profileSuccess.style.display = 'none';
+            }, 3000);
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+        }
+
+        // Tüm hata mesajlarını temizle
+        function clearErrorMessages() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => {
+                msg.style.display = 'none';
+                msg.textContent = '';
+            });
+            
+            const successMessages = document.querySelectorAll('.success-message');
+            successMessages.forEach(msg => {
+                msg.style.display = 'none';
+                msg.textContent = '';
+            });
+        }
+
+        // E-posta doğrulama
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Zaman formatlama
+        function formatTime(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Tarih formatlama
+        function formatDate(date) {
+            return date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        // Dinleme geçmişini güncelle
+        function updateListeningHistory() {
+            if (!state.currentRadio || !state.currentUser) return;
+            
+            const now = new Date();
+            
+            // Aynı radyo zaten son dinlenenlerde varsa güncelle
+            const existingIndex = state.listeningHistory.findIndex(
+                item => item.stationId === state.currentRadio.id
+            );
+            
+            if (existingIndex !== -1) {
+                state.listeningHistory[existingIndex].time = now;
+            } else {
+                // Yeni dinleme kaydı ekle
+                state.listeningHistory.push({
+                    stationId: state.currentRadio.id,
+                    time: now
+                });
+            }
+            
+            // Dinleme geçmişini güncelle
+            if (elements.profileContainer.style.display === 'block') {
+                renderListeningHistory();
+            }
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+        }
+
+        // Çalma listesine ekle
+        function addToPlaylist() {
+            if (!state.currentRadio || !state.currentUser) {
+                showNotification('Çalma listesine eklemek için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            if (state.playlist.some(item => item.id === state.currentRadio.id)) {
+                showNotification('Bu radyo zaten çalma listenizde!', 'info');
+                return;
+            }
+            
+            state.playlist.push(state.currentRadio);
+            renderPlaylist();
+            elements.playlistSection.style.display = 'block';
+            
+            // Eğer çalma listesi gizliyse, eklenen öğeyi göstermek için aç
+            if (!elements.playlistItems.classList.contains('visible')) {
+                togglePlaylistVisibility();
+            }
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+            showNotification('Radyo çalma listenize eklendi');
+        }
+
+        // Çalma listesini render et
+        function renderPlaylist() {
+            elements.playlistItems.innerHTML = '';
+            
+            if (state.playlist.length === 0) {
+                elements.playlistItems.innerHTML = '<div class="empty-playlist">Çalma listeniz boş</div>';
+                return;
+            }
+            
+            state.playlist.forEach((radio, index) => {
+                const playlistItem = document.createElement('div');
+                playlistItem.className = 'playlist-item';
+                playlistItem.innerHTML = `
+                    <img src="${radio.imageUrl}" alt="${radio.name}" loading="lazy">
+                    <div class="playlist-item-info">
+                        <h4>${radio.name}</h4>
+                        <p>${radio.genre}</p>
+                    </div>
+                    <div class="playlist-item-actions">
+                        <button class="playlist-action-btn play-action" data-index="${index}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="playlist-action-btn remove-action" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                elements.playlistItems.appendChild(playlistItem);
+            });
+            
+            // Play ve remove butonlarına event listener ekle
+            document.querySelectorAll('.play-action').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.closest('button').dataset.index;
+                    playFromPlaylist(index);
+                });
+            });
+            
+            document.querySelectorAll('.remove-action').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = e.target.closest('button').dataset.index;
+                    removeFromPlaylist(index);
+                });
+            });
+        }
+
+        // Çalma listesinden çal
+        function playFromPlaylist(index) {
+            const radio = state.playlist[index];
+            if (radio) {
+                selectRadio(radio);
+                playRadio(radio.streamUrl);
+                showNotification(`Çalma listesinden: ${radio.name}`);
+            }
+        }
+
+        // Çalma listesinden kaldır
+        function removeFromPlaylist(index) {
+            const removedRadio = state.playlist[index];
+            state.playlist.splice(index, 1);
+            renderPlaylist();
+            
+            if (state.playlist.length === 0) {
+                elements.playlistItems.innerHTML = '<div class="empty-playlist">Çalma listeniz boş</div>';
+            }
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+            showNotification(`${removedRadio.name} çalma listenizden kaldırıldı`);
+        }
+
+        // Radyoyu paylaş
+        function shareRadio() {
+            if (!state.currentRadio) {
+                showNotification('Paylaşmak için önce bir radyo seçmelisiniz!', 'warning');
+                return;
+            }
+            
+            const shareText = `${state.currentRadio.name} radyosunu dinliyorum: ${window.location.href}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: state.currentRadio.name,
+                    text: 'Bu harika radyoyu dinle!',
+                    url: window.location.href
+                }).catch(err => {
+                    console.log('Paylaşım iptal edildi:', err);
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        // Panoya kopyala
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showNotification('Radyo bağlantısı kopyalandı!');
+        }
+
+        // Radyoları beğeni sayısına göre sırala
+        function sortStationsByLikes() {
+            state.stations.sort((a, b) => b.likes - a.likes);
+            state.currentPage = 1;
+            renderStations();
+            setupPagination();
+        }
+
+        // Radyoyu beğen/beğenme
+        function toggleLike() {
+            if (!state.currentUser) {
+                showNotification('Beğeni yapmak için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            if (!state.currentRadio) {
+                showNotification('Lütfen önce bir radyo seçin!', 'warning');
+                return;
+            }
+            
+            const radioId = state.currentRadio.id;
+            const radioIndex = state.stations.findIndex(s => s.id === radioId);
+            
+            if (radioIndex === -1) return;
+            
+            const likeIndex = state.likedStations.indexOf(radioId);
+            
+            if (likeIndex === -1) {
+                state.stations[radioIndex].likes++;
+                state.likedStations.push(radioId);
+                elements.likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Beğendiniz';
+                showNotification('Radyo beğenildi!');
+            } else {
+                state.stations[radioIndex].likes--;
+                state.likedStations.splice(likeIndex, 1);
+                elements.likeBtn.innerHTML = '<i class="far fa-thumbs-up"></i> Beğen';
+                showNotification('Beğeni kaldırıldı', 'info');
+            }
+            
+            elements.likeCount.textContent = state.stations[radioIndex].likes.toLocaleString();
+            renderStations();
+            
+            // Profil sayfası açıksa beğeni sayısını güncelle
+            if (elements.profileContainer.style.display === 'block') {
+                elements.likesGiven.textContent = state.likedStations.length;
+            }
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+        }
+
+        // Oynatıcıdan favori ekle/kaldır
+        function toggleFavoriteFromPlayer() {
+            if (!state.currentRadio) return;
+            toggleFavorite(state.currentRadio.id);
+            
+            if (elements.showFavoritesBtn.classList.contains('active')) {
+                renderStations(state.favorites);
+            }
+            
+            // Profil sayfası açıksa favorileri güncelle
+            if (elements.profileContainer.style.display === 'block') {
+                elements.favoriteCount.textContent = state.favorites.length;
+                renderFavoriteStations();
+            }
+            
+            // LocalStorage'a kaydet
+            saveUserToLocalStorage();
+        }
+
+        // Sayfalama ayarla
+        function setupPagination() {
+            elements.pagination.innerHTML = '';
+            
+            const totalPages = Math.ceil(state.stations.length / state.itemsPerPage);
+            
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.addEventListener('click', () => {
+                if (state.currentPage > 1) {
+                    state.currentPage--;
+                    renderStations();
+                    setupPagination();
+                }
+            });
+            elements.pagination.appendChild(prevBtn);
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === state.currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    state.currentPage = i;
+                    renderStations();
+                    setupPagination();
+                });
+                elements.pagination.appendChild(pageBtn);
+            }
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.addEventListener('click', () => {
+                if (state.currentPage < totalPages) {
+                    state.currentPage++;
+                    renderStations();
+                    setupPagination();
+                }
+            });
+            elements.pagination.appendChild(nextBtn);
+        }
+
+        // Radyoları render et
+        function renderStations(stations = state.stations) {
+            elements.stationsList.innerHTML = '';
+            
+            const startIndex = (state.currentPage - 1) * state.itemsPerPage;
+            const endIndex = startIndex + state.itemsPerPage;
+            const stationsToShow = stations.slice(startIndex, endIndex);
+            
+            stationsToShow.forEach(station => {
+                const isFavorite = state.favorites.some(fav => fav.id === station.id);
+                const isCurrent = state.currentRadio && state.currentRadio.id === station.id;
+                
+                const stationElement = document.createElement('div');
+                stationElement.className = `station ${isCurrent ? 'active' : ''}`;
+                stationElement.innerHTML = `
+                    <img src="${station.imageUrl}" alt="${station.name}" data-id="${station.id}" loading="lazy">
+                    <h3>${station.name}</h3>
+                    <span class="likes"><i class="fas fa-heart"></i> ${station.likes.toLocaleString()}</span>
+                    <button class="fav-btn" data-id="${station.id}">
+                        <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                    </button>
+                `;
+                
+                stationElement.addEventListener('click', () => {
+                    selectRadio(station);
+                    playRadio(station.streamUrl);
+                });
+
+                stationElement.querySelector('.fav-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(station.id);
+                    renderStations(stations);
+                    
+                    // LocalStorage'a kaydet
+                    saveUserToLocalStorage();
+                });
+
+                elements.stationsList.appendChild(stationElement);
+            });
+        }
+
+        // Radyoları filtrele
+        function filterStations() {
+            const searchTerm = elements.searchRadio.value.toLowerCase();
+            const selectedCity = elements.cityFilter.value;
+            
+            const filtered = state.stations.filter(station => {
+                const matchesSearch = station.name.toLowerCase().includes(searchTerm) || 
+                                    station.genre.toLowerCase().includes(searchTerm);
+                const matchesCity = selectedCity ? station.city === selectedCity : true;
+                
+                return matchesSearch && matchesCity;
+            });
+            
+            state.currentPage = 1;
+            renderStations(filtered);
+            setupPagination();
+        }
+
+        // Radyoları kategoriye göre filtrele
+        function filterStationsByCategory(category) {
+            if (category === 'all') {
+                renderStations();
+                return;
+            }
+            
+            const filteredStations = state.stations.filter(station => station.category === category);
+            renderStations(filteredStations);
+        }
+
+        // Radyo seç
+        function selectRadio(radio) {
+            state.currentRadio = radio;
+            
+            elements.currentRadioName.textContent = radio.name;
+            elements.currentRadioImage.src = radio.imageUrl;
+            elements.currentRadioGenre.textContent = radio.genre;
+            elements.listenerCount.textContent = Math.floor(Math.random() * 1000) + 50;
+            elements.likeCount.textContent = radio.likes.toLocaleString();
+            
+            const isFavorite = state.favorites.some(fav => fav.id === radio.id);
+            elements.favBtn.innerHTML = `<i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i> ${isFavorite ? 'Favori' : 'Favori Ekle'}`;
+            
+            const isLiked = state.likedStations.includes(radio.id);
+            elements.likeBtn.innerHTML = `<i class="${isLiked ? 'fas' : 'far'} fa-thumbs-up"></i> ${isLiked ? 'Beğendiniz' : 'Beğen'}`;
+            
+            document.querySelector('.chat-section h2').innerHTML = `<i class="fas fa-comments"></i> ${radio.name} Sohbet`;
+            
+            updateDetailContainer(radio);
+            
+            // Sosyal medya ikonlarını güncelle
+            updateSocialMediaIcons(radio);
+            
+            // Radyo aktif olarak işaretle
+            document.querySelectorAll('.station').forEach(station => {
+                station.classList.remove('active');
+            });
+            document.querySelector(`.station img[data-id="${radio.id}"]`)?.closest('.station')?.classList.add('active');
+        }
+
+        // Radyo çal
+        function playRadio(streamUrl) {
+            try {
+                elements.radioPlayer.src = streamUrl;
+                elements.radioPlayer.play()
+                    .then(() => {
+                        state.isPlaying = true;
+                        elements.playPauseIcon.classList.remove('fa-play');
+                        elements.playPauseIcon.classList.add('fa-pause');
+                        startMetadataFetching();
+                    })
+                    .catch(e => {
+                        console.error('Radyo oynatılırken hata oluştu:', e);
+                        showNotification('Radyo oynatılırken hata oluştu. Lütfen başka bir radyo seçin.', 'error');
+                    });
+            } catch (e) {
+                console.error('Radyo oynatılırken hata oluştu:', e);
+                showNotification('Radyo oynatılırken hata oluştu. Lütfen başka bir radyo seçin.', 'error');
+            }
+        }
+
+        // Sosyal medya ikonlarını güncelle
+        function updateSocialMediaIcons(radio) {
+            const socialMediaContainer = document.querySelector('.social-media');
+            socialMediaContainer.innerHTML = '';
+            
+            if (radio.socialMedia) {
+                if (radio.socialMedia.facebook) {
+                    const icon = createSocialIcon('facebook-f', radio.socialMedia.facebook);
+                    socialMediaContainer.appendChild(icon);
+                }
+                if (radio.socialMedia.twitter) {
+                    const icon = createSocialIcon('twitter', radio.socialMedia.twitter);
+                    socialMediaContainer.appendChild(icon);
+                }
+                if (radio.socialMedia.instagram) {
+                    const icon = createSocialIcon('instagram', radio.socialMedia.instagram);
+                    socialMediaContainer.appendChild(icon);
+                }
+                if (radio.socialMedia.youtube) {
+                    const icon = createSocialIcon('youtube', radio.socialMedia.youtube);
+                    socialMediaContainer.appendChild(icon);
+                }
+                if (radio.website) {
+                    const icon = createSocialIcon('globe', radio.website);
+                    socialMediaContainer.appendChild(icon);
+                }
+            } else if (radio.website) {
+                const icon = createSocialIcon('globe', radio.website);
+                socialMediaContainer.appendChild(icon);
+            }
+        }
+
+        // Sosyal medya ikonu oluştur
+        function createSocialIcon(iconName, url) {
+            const icon = document.createElement('div');
+            icon.className = 'social-icon';
+            icon.innerHTML = `<i class="fab fa-${iconName}"></i>`;
+            icon.addEventListener('click', () => {
+                window.open(url, '_blank');
+            });
+            return icon;
+        }
+
+        // Detay container'ını güncelle
+        function updateDetailContainer(radio) {
+            elements.detailContainer.style.display = 'block';
+            elements.detailRadioName.textContent = radio.name;
+            elements.detailRadioCity.textContent = radio.city;
+            elements.detailRadioWebsite.textContent = radio.website;
+            elements.detailRadioWebsite.href = radio.website;
+            elements.detailRadioGenre.textContent = radio.genre;
+            elements.detailRadioGenreTag.textContent = radio.category;
+            elements.detailRadioPhone.textContent = radio.phone;
+            elements.detailRadioLikes.textContent = radio.likes.toLocaleString();
+        }
+
+        // İletişim mesajı gönder
+        function sendContactMessage() {
+            if (!state.currentUser) {
+                showNotification('İletişim formunu göndermek için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            if (!name || !email || !subject || !message) {
+                showNotification('Lütfen tüm alanları doldurunuz!', 'warning');
+                return;
+            }
+            
+            // Burada gerçek bir API çağrısı yapılabilir
+            // Demo amaçlı sadece bildirim gösteriyoruz
+            showNotification(`Mesajınız KEREM Radyo'ya başarıyla gönderildi!`);
+            
+            elements.contactForm.reset();
+        }
+
+        // Favori ekle/kaldır
+        function toggleFavorite(radioId) {
+            if (!state.currentUser) {
+                showNotification('Favorilere eklemek için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            const radio = state.stations.find(s => s.id === radioId);
+            const index = state.favorites.findIndex(fav => fav.id === radioId);
+            
+            if (index === -1) {
+                state.favorites.push(radio);
+                if (state.currentRadio && state.currentRadio.id === radioId) {
+                    elements.favBtn.innerHTML = '<i class="fas fa-heart"></i> Favori';
+                }
+                showNotification(`${radio.name} favorilere eklendi`);
+            } else {
+                state.favorites.splice(index, 1);
+                if (state.currentRadio && state.currentRadio.id === radioId) {
+                    elements.favBtn.innerHTML = '<i class="far fa-heart"></i> Favori Ekle';
+                }
+                showNotification(`${radio.name} favorilerden kaldırıldı`, 'info');
+            }
+        }
+
+        // Favorileri göster
+        function showFavorites() {
+            if (!state.currentUser) {
+                showNotification('Favorilerinizi görmek için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            elements.showFavoritesBtn.classList.toggle('active');
+            
+            if (elements.showFavoritesBtn.classList.contains('active')) {
+                state.currentPage = 1;
+                renderStations(state.favorites);
+                setupPagination();
+                showNotification('Favori radyolarınız gösteriliyor');
+            } else {
+                state.currentPage = 1;
+                renderStations();
+                setupPagination();
+            }
+        }
+
+        // Mesaj gönder
+        function sendMessage() {
+            if (!state.currentUser) {
+                showNotification('Sohbet için giriş yapmalısınız!', 'warning');
+                return;
+            }
+            
+            if (!state.currentRadio) {
+                showNotification('Lütfen önce bir radyo seçin!', 'warning');
+                return;
+            }
+            
+            const messageText = elements.messageInput.value.trim();
+            if (!messageText) return;
+            
+            const message = {
+                sender: state.currentUser.name,
+                text: messageText,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            state.messages.push(message);
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = 'chat-message';
+            messageElement.innerHTML = `
+                <span class="sender">${message.sender}:</span>
+                <span class="text">${message.text}</span>
+                <span class="time">${message.time}</span>
+            `;
+            
+            elements.chatMessages.appendChild(messageElement);
+            elements.messageInput.value = '';
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+            
+            // Gerçek uygulamada burada bir API çağrısı yapılır
+            // Demo amaçlı sadece yerel olarak ekliyoruz
+        }
+
+        // Auth formlarını değiştir
+        function toggleAuthForms(form) {
+            if (form === 'login') {
+                elements.loginForm.style.display = 'block';
+                elements.registerForm.style.display = 'none';
+                elements.profileContainer.style.display = 'none';
+                clearErrorMessages();
+            } else {
+                elements.loginForm.style.display = 'none';
+                elements.registerForm.style.display = 'block';
+                elements.profileContainer.style.display = 'none';
+                clearErrorMessages();
+            }
+        }
+
+        // Giriş yap
+        function handleLogin() {
+            // Hata mesajlarını temizle
+            clearErrorMessages();
+            
+            const email = elements.loginEmail.value;
+            const password = elements.loginPassword.value;
+            
+            // Doğrulama
+            if (!email) {
+                elements.loginEmailError.textContent = 'E-posta gereklidir';
+                elements.loginEmailError.style.display = 'block';
+                return;
+            }
+            
+            if (!password) {
+                elements.loginPasswordError.textContent = 'Şifre gereklidir';
+                elements.loginPasswordError.style.display = 'block';
+                return;
+            }
+            
+            // Yükleme göstergesi
+            elements.loginBtnText.style.display = 'none';
+            elements.loginSpinner.classList.remove('hidden');
+            
+            // Simüle edilmiş API çağrısı
+            setTimeout(() => {
+                // Demo amaçlı sabit bir kullanıcı
+                state.currentUser = {
+                    name: email.split('@')[0],
+                    email: email,
+                    password: password,
+                    profilePic: 'https://via.placeholder.com/100'
+                };
+                
+                // LocalStorage'a kaydet
+                saveUserToLocalStorage();
+                
+                // UI'ı güncelle
+                updateUIAfterAuth();
+                
+                // Başarı mesajı
+                elements.loginSuccess.textContent = 'Başarıyla giriş yaptınız!';
+                elements.loginSuccess.style.display = 'block';
+                
+                // Yükleme göstergesini kaldır
+                elements.loginBtnText.style.display = 'inline';
+                elements.loginSpinner.classList.add('hidden');
+                
+                // 3 saniye sonra başarı mesajını gizle
+                setTimeout(() => {
+                    elements.loginSuccess.style.display = 'none';
+                }, 3000);
+                
+                showNotification('Başarıyla giriş yaptınız!');
+            }, 1000);
+        }
+
+        // Kayıt ol
+        function handleRegister() {
+            // Hata mesajlarını temizle
+            clearErrorMessages();
+            
+            const name = elements.registerName.value;
+            const email = elements.registerEmail.value;
+            const password = elements.registerPassword.value;
+            const confirmPassword = elements.registerConfirmPassword.value;
+            
+            // Doğrulama
+            let isValid = true;
+            
+            if (!name) {
+                elements.registerNameError.textContent = 'Kullanıcı adı gereklidir';
+                elements.registerNameError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!email) {
+                elements.registerEmailError.textContent = 'E-posta gereklidir';
+                elements.registerEmailError.style.display = 'block';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                elements.registerEmailError.textContent = 'Geçerli bir e-posta adresi girin';
+                elements.registerEmailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                elements.registerPasswordError.textContent = 'Şifre gereklidir';
+                elements.registerPasswordError.style.display = 'block';
+                isValid = false;
+            } else if (password.length < 6) {
+                elements.registerPasswordError.textContent = 'Şifre en az 6 karakter olmalıdır';
+                elements.registerPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                elements.registerConfirmPasswordError.textContent = 'Şifreler eşleşmiyor';
+                elements.registerConfirmPasswordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Yükleme göstergesi
+            elements.registerBtnText.style.display = 'none';
+            elements.registerSpinner.classList.remove('hidden');
+            
+            // Simüle edilmiş API çağrısı
+            setTimeout(() => {
+                // Yeni kullanıcı oluştur
+                state.currentUser = {
+                    name: name,
+                    email: email,
+                    password: password,
+                    profilePic: 'https://via.placeholder.com/100'
+                };
+                
+                // LocalStorage'a kaydet
+                saveUserToLocalStorage();
+                
+                // UI'ı güncelle
+                updateUIAfterAuth();
+                
+                // Başarı mesajı
+                elements.registerSuccess.textContent = 'Kayıt başarılı! Giriş yapabilirsiniz.';
+                elements.registerSuccess.style.display = 'block';
+                
+                // Yükleme göstergesini kaldır
+                elements.registerBtnText.style.display = 'inline';
+                elements.registerSpinner.classList.add('hidden');
+                
+                // Giriş formuna geç
+                setTimeout(() => {
+                    toggleAuthForms('login');
+                }, 2000);
+                
+                showNotification('Kayıt işlemi başarıyla tamamlandı!');
+            }, 1500);
+        }
+
+        // Şifremi unuttum
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            
+            const email = elements.loginEmail.value;
+            
+            if (!email) {
+                showNotification('Lütfen e-posta adresinizi giriniz.', 'warning');
+                elements.loginEmail.focus();
+                return;
+            }
+            
+            showNotification(`Şifre sıfırlama bağlantısı ${email} adresine gönderildi.\n\nDemo amaçlı bu işlem gerçekte bir e-posta göndermez.`);
+        }
+
+        // Sosyal medya ile giriş
+        function socialLogin(provider) {
+            showNotification(`${provider} ile giriş yapılıyor...\n\nDemo amaçlı bu buton sadece görseldir. Gerçek uygulamada burada ${provider} OAuth entegrasyonu olacaktır.`, 'info');
+        }
+
+        // Çıkış yap
+        function logout() {
+            // Kullanıcı verilerini temizle
+            state.currentUser = null;
+            state.currentRadio = null;
+            state.playlist = [];
+            
+            // Player'ı durdur
+            elements.radioPlayer.pause();
+            elements.radioPlayer.src = '';
+            state.isPlaying = false;
+            elements.playPauseIcon.classList.remove('fa-pause');
+            elements.playPauseIcon.classList.add('fa-play');
+            
+            // UI'ı güncelle
+            updateUIAfterAuth();
+            
+            // LocalStorage'ı temizle
+            localStorage.removeItem('keremRadyoUser');
+            localStorage.removeItem('keremRadyoFavorites');
+            localStorage.removeItem('keremRadyoLikedStations');
+            localStorage.removeItem('keremRadyoHistory');
+            localStorage.removeItem('keremRadyoPlaylist');
+            
+            showNotification('Başarıyla çıkış yaptınız.');
+        }
+
+        // Auth durumuna göre UI'ı güncelle
+        function updateUIAfterAuth() {
+            if (state.currentUser) {
+                elements.loginBtn.classList.add('hidden');
+                elements.profileBtn.classList.remove('hidden');
+                elements.logoutBtn.classList.remove('hidden');
+                elements.favBtn.classList.remove('hidden');
+                elements.likeBtn.classList.remove('hidden');
+                elements.addToPlaylistBtn.classList.remove('hidden');
+                elements.showFavoritesBtn.classList.remove('hidden');
+                elements.messageInput.disabled = false;
+                elements.playlistSection.style.display = 'block';
+                
+                // Form alanlarını temizle
+                elements.loginEmail.value = '';
+                elements.loginPassword.value = '';
+                elements.registerName.value = '';
+                elements.registerEmail.value = '';
+                elements.registerPassword.value = '';
+                elements.registerConfirmPassword.value = '';
+                
+                toggleAuthForms('login');
+                
+                // Profil bilgilerini yükle
+                loadProfileData();
+                
+                // Çalma listesini render et
+                renderPlaylist();
+            } else {
+                elements.loginBtn.classList.remove('hidden');
+                elements.profileBtn.classList.add('hidden');
+                elements.logoutBtn.classList.add('hidden');
+                elements.favBtn.classList.add('hidden');
+                elements.likeBtn.classList.add('hidden');
+                elements.addToPlaylistBtn.classList.add('hidden');
+                elements.showFavoritesBtn.classList.add('hidden');
+                elements.messageInput.disabled = true;
+                elements.profileContainer.style.display = 'none';
+                elements.playlistSection.style.display = 'none';
+                
+                toggleAuthForms('login');
+            }
+        }
+
+        // Tema değiştirme fonksiyonu
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+            
+            // Tema değiştikçe ikonu güncelle
+            const icon = themeToggle.querySelector('i');
+            if (body.classList.contains('light-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Tema';
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Tema';
+            }
+        });
+
+        // Sayfa yüklendiğinde tema kontrolü
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-theme');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i> Tema';
+        }
+
+        // Ekolayzır animasyonunu müzik çalarken göster
+        const equalizer = document.querySelector('.equalizer');
+        
+        elements.radioPlayer.addEventListener('play', () => {
+            equalizer.style.display = 'flex';
+        });
+        
+        elements.radioPlayer.addEventListener('pause', () => {
+            equalizer.style.display = 'none';
+        });
+        
+        equalizer.style.display = 'none';
+    </script>
+</body>
+</html>
